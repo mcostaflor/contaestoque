@@ -16,8 +16,10 @@ const NavbarComponent = (props) => {
     const toggle = () => setIsOpen(!isOpen);
 
     return (
-        <Navbar color="dark" expand="md">
-            <NavbarBrand href="/">EstoqueX</NavbarBrand>
+        <Navbar color="light" expand="md">
+            <RouterLink>
+                <NavbarBrand to="/">EstoqueX</NavbarBrand>
+            </RouterLink>
             <NavbarToggler onClick={toggle} />
             <Collapse isOpen={isOpen} navbar>
                 <Nav className="mr-auto" navbar>
