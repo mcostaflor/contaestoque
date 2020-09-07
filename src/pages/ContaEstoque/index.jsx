@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { validate as barcodeValidate } from '../../validators/barcode';
 import { Form, Input, Label, Button, Col, Table } from 'reactstrap';
-import ExportCsv from '../../components/export-csv';
+import ExportCsv from './export-csv';
 
 function ContaEstoque() {
 

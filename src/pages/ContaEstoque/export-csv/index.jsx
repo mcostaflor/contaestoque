@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Spinner } from 'reactstrap';
-import { exportCsv } from '../../helper/export/csv';
+import { exportCsv } from '../../../helper/export/csv';
 
 const ExportCsv = ({
     products,
