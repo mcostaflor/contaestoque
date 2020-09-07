@@ -17,8 +17,8 @@ const NavbarComponent = (props) => {
 
     return (
         <Navbar color="light" expand="md">
-            <RouterLink>
-                <NavbarBrand to="/">EstoqueX</NavbarBrand>
+            <RouterLink to="/">
+                <NavbarBrand>Estoque</NavbarBrand>
             </RouterLink>
             <NavbarToggler onClick={toggle} />
             <Collapse isOpen={isOpen} navbar>
