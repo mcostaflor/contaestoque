@@ -18,9 +18,8 @@ const NavbarComponent = (props) => {
     return (
         <Navbar color="light" expand="md">
             <RouterLink to="/">
-                <NavbarBrand>Estoque</NavbarBrand>
+                <NavbarBrand onClick={toggle}>Estoque</NavbarBrand>
             </RouterLink>
-            <NavbarToggler onClick={toggle} />
             <Collapse isOpen={isOpen} navbar>
                 <Nav className="mr-auto" navbar>
                     <RouterLink to="/">
