@@ -7,8 +7,7 @@ import HomePage from '../pages/Home';
 const Routes = (props) => {
     return (
         <Switch>
-            <Route exact path={'/'} component={HomePage} />
-            <Route exact path={'/contaestoque'} component={ContaEstoque} />
+            <Route exact path={'/'} component={ContaEstoque} />
         </Switch>
     );
 }

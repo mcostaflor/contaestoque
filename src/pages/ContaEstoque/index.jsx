@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { validate as barcodeValidate } from '../../validators/barcode';
 import { Form, Input, Label, Button, Col, Table } from 'reactstrap';
 import ExportCsv from './export-csv';
+import beep from './beep.mp3'
 
 function ContaEstoque() {
 
@@ -14,7 +15,12 @@ function ContaEstoque() {
   }, [barcodeInput])
 
   useEffect(() => {
-    setProducts(JSON.parse(localStorage.getItem('products')));
+    const storedProducts = JSON.parse(localStorage.getItem('products'));
+    if (storedProducts) {
+      setProducts(storedProducts);
+    } else {
+      setProducts([])
+    }
   }, []);
 
   useEffect(() => {
@@ -42,6 +48,8 @@ function ContaEstoque() {
     }
     setBarcodeInput('');
     setBarcodeInputError(false);
+    var audio = new Audio(beep);
+    audio.play();
   }
 
   const handleDeleteItem = (index) => {
@@ -67,6 +75,10 @@ function ContaEstoque() {
     setProducts(productsAfter);
   }
 
+  console.log(products)
+  const productsCount = products?.length > 0 ? products.reduce((total, product,) => total + product.qty, 0) : 0;
+  console.log(productsCount);
+
   return (
     <div className="App"
       style={{
@@ -90,9 +102,9 @@ function ContaEstoque() {
         </div>
         <Col xs={12} sm={4} md={3} xl={2} className={'pb-3'}>
           <Form onSubmit={handleProductSubmit}>
+            <Label for='barcodeInput'>Código de Barras</Label>
             <div style={{ display: 'flex' }}>
               <div style={{ flex: 1 }}>
-                <Label for='barcodeInput'>Código de Barras</Label>
                 <Input
                   type='barcode'
                   name='barcodeInput'
@@ -107,6 +119,7 @@ function ContaEstoque() {
             </Button>
             </div>
           </Form>
+          Total de Produtos: {productsCount}
         </Col>
       </div>
       <div style={{

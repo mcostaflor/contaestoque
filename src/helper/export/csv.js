@@ -19,15 +19,15 @@ const exportCsv = (data) => {
 
     var link = document.createElement("a");
     var blob = new Blob([dataString], { type: 'text/csv;charset=utf-8;' });
-    if (navigator.msSaveBlob) { // IE 10+
-        navigator.msSaveBlob(blob, `Dados ${new Date().toLocaleDateString()}`);
+    var name = prompt('Nome do arquivo', `Dados ${new Date().toLocaleDateString()}`);
+    if (navigator.msSaveOrOpenBlob) { // IE 10+
+        navigator.msSaveOrOpenBlob(blob, name);
     } else {
         link = document.createElement("a");
-        if (link.download !== undefined) { // feature detection
-            // Browsers that support HTML5 download attribute
+        if (link.download !== undefined) { 
             var url = URL.createObjectURL(blob);
             link.setAttribute("href", url);
-            link.setAttribute("download", `Dados ${new Date().toLocaleDateString()}`);
+            link.setAttribute("download", name);
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
