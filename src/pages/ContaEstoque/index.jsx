@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { validate as barcodeValidate } from '../../helper/validators/barcode';
-import { Form, Input, Label, Button, Col, Table } from 'reactstrap';
 import ExportCsv from './export-csv';
 import beep from '../../resources/sounds/beep.mp3'
-import {save, load} from '../../helper/storage/estoque-storage/index'
+import { save, load } from '../../helper/storage/estoque-storage/index'
+import { Button, Container, Grid, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
 
 function ContaEstoque() {
 
@@ -25,7 +25,7 @@ function ContaEstoque() {
   }, []);
 
   useEffect(() => {
-    if(products?.length > 0) {
+    if (products?.length > 0) {
       save(products);
     }
   }, [products]);
@@ -56,8 +56,6 @@ function ContaEstoque() {
   }
 
   const handleDeleteItem = (index) => {
-    console.log(index);
-
     const productsAfter = products.map(p => p);
     productsAfter.splice(index, 1);
 
@@ -81,91 +79,81 @@ function ContaEstoque() {
   const productsCount = products?.length > 0 ? products.reduce((total, product,) => total + product.qty, 0) : 0;
 
   return (
-    <div className="App"
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh'
-      }}
-    >
-      <div style={{
-
-      }}>
-        <div
-          className={'p-3'}
-        >
-          <Button onClick={() => setProducts([])} className={'mr-3'}>
-            Novo
-        </Button>
-          <ExportCsv
-            products={products}
-          />
-        </div>
-        <Col xs={12} sm={4} md={3} xl={2} className={'pb-3'}>
-          <Form onSubmit={handleProductSubmit}>
-            <Label for='barcodeInput'>Código de Barras</Label>
-            <div style={{ display: 'flex' }}>
-              <div style={{ flex: 1 }}>
-                <Input
+    <Container maxWidth="md" sx={{ backgroundColor: '#ccc', padding: 1, minHeight: '100vh' }}>
+      <Grid container rowSpacing={1}>
+        <Grid item xs={12}>
+          <Paper sx={{ padding: 1 }}>
+            <Stack direction={'row'} spacing={1}>
+              <Button variant='contained' onClick={() => setProducts([])}>
+                Novo
+              </Button>
+              <ExportCsv
+                products={products}
+              />
+            </Stack>
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <Paper sx={{ padding: 1 }}>
+            <Stack direction={"column"} spacing={1}>
+              <form onSubmit={handleProductSubmit}>
+                <TextField
                   type='barcode'
-                  name='barcodeInput'
-                  id='barcodeInput'
                   onChange={e => setBarcodeInput(e.target.value)}
                   value={barcodeInput}
                   invalid={barcodeInputError}
+                  label="Código de Barras"
                 />
-              </div>
-              <Button type={'submit'} className={'ml-3'}>
-                Ir
-            </Button>
-            </div>
-          </Form>
-          Total de Produtos: {productsCount}
-        </Col>
-      </div>
-      <div style={{
-        flex: 1,
-        overflowX: 'auto'
-      }}>
-        <Col xs={12} md={6} xl={4}>
-          <Table dark>
-            <thead>
-              <tr>
-                <th>
-                  Cód. de Barras
-              </th>
-                <th>
-                  Quantidade
-              </th>
-                <th>
-                  Ações
-              </th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.sort((a, b) => b.date - a.date).map((product, index) => (
-                <tr key={product.barcode}>
-                  <td>
-                    {product.barcode}
-                  </td>
-                  <td>
-                    {product.qty}
-                  </td>
-                  <td>
-                    <Button size="sm" onClick={() => handleSubtractItem(index)}>
-                      -
-                  </Button>
-                    <Button size="sm" className={'ml-2'} onClick={() => handleDeleteItem(index)}>
-                      x
-                  </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Col>
-      </div>
-    </div>
+              </form>
+              <Typography>
+                Total de Produtos: {productsCount}
+              </Typography>
+            </Stack>
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <Paper sx={{ padding: 1 }}>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>
+                      Cód. de Barras
+                    </TableCell>
+                    <TableCell>
+                     Quantidade
+                    </TableCell>
+                    <TableCell>
+                      Ações
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                {products.sort((a, b) => b.date - a.date).map((product, index) => (
+                  <TableRow key={product.barcode}>
+                    <TableCell>
+                      {product.barcode}
+                    </TableCell>
+                    <TableCell>
+                      {product.qty}
+                    </TableCell>
+                    <TableCell>
+                      <Button variant='contained' size='small' onClick={() => handleSubtractItem(index)}>
+                        -
+                      </Button>
+                      <Button variant='contained' className={'ml-2'} onClick={() => handleDeleteItem(index)}>
+                        x
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
 

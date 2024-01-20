@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Spinner } from 'reactstrap';
 import { exportCsv } from '../../../helper/export/csv';
+import { Button, CircularProgress } from '@mui/material';
 
 const ExportCsv = ({
     products,
@@ -16,10 +16,10 @@ const ExportCsv = ({
 
     return (
         <>
-            <Button onClick={handleExportCSV}>
+            <Button variant="contained" onClick={handleExportCSV}>
                 Exportar (CSV)
                 {loading &&
-                    <Spinner size='sm' />
+                    <CircularProgress/>
                 }
             </Button>
         </>

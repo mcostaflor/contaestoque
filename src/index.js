@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './global-styles.css';
+
 import { createRoot } from 'react-dom/client'
 import ContaEstoque from './pages/ContaEstoque';
 
