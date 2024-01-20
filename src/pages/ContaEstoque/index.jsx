@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { validate as barcodeValidate } from '../../validators/barcode';
+import { validate as barcodeValidate } from '../../helper/validators/barcode';
 import { Form, Input, Label, Button, Col, Table } from 'reactstrap';
 import ExportCsv from './export-csv';
-import beep from './beep.mp3'
+import beep from '../../resources/sounds/beep.mp3'
+import {save, load} from '../../helper/storage/estoque-storage/index'
 
 function ContaEstoque() {
 
@@ -15,7 +16,7 @@ function ContaEstoque() {
   }, [barcodeInput])
 
   useEffect(() => {
-    const storedProducts = JSON.parse(localStorage.getItem('products'));
+    const storedProducts = load();
     if (storedProducts) {
       setProducts(storedProducts);
     } else {
@@ -24,7 +25,9 @@ function ContaEstoque() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('products', JSON.stringify(products));
+    if(products?.length > 0) {
+      save(products);
+    }
   }, [products]);
 
   const handleProductSubmit = e => {
@@ -75,9 +78,7 @@ function ContaEstoque() {
     setProducts(productsAfter);
   }
 
-  console.log(products)
   const productsCount = products?.length > 0 ? products.reduce((total, product,) => total + product.qty, 0) : 0;
-  console.log(productsCount);
 
   return (
     <div className="App"

@@ -1,14 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Routes from './routes';
-import { BrowserRouter } from 'react-router-dom';
 
-ReactDOM.render(
+import { createRoot } from 'react-dom/client'
+import ContaEstoque from './pages/ContaEstoque';
+
+const root = createRoot(document.getElementById('root'))
+
+root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes />
-    </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+    <ContaEstoque />
+  </React.StrictMode>
+)
+ 
