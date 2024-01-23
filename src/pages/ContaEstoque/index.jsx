@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { validate as barcodeValidate } from '../../helper/validators/barcode';
 import ExportCsv from './export-csv';
 import beep from '../../resources/sounds/beep.mp3'
-import { save, load } from '../../helper/storage/estoque-storage/index'
-import { Button, Container, Grid, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
+import { saveProducts, loadProducts } from '../../helper/storage/estoque-storage/index'
+import { Box, Button, Container, Grid, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
+
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 function ContaEstoque() {
 
@@ -16,7 +19,7 @@ function ContaEstoque() {
   }, [barcodeInput])
 
   useEffect(() => {
-    const storedProducts = load();
+    const storedProducts = loadProducts();
     if (storedProducts) {
       setProducts(storedProducts);
     } else {
@@ -26,7 +29,7 @@ function ContaEstoque() {
 
   useEffect(() => {
     if (products?.length > 0) {
-      save(products);
+      saveProducts(products);
     }
   }, [products]);
 
@@ -79,11 +82,11 @@ function ContaEstoque() {
   const productsCount = products?.length > 0 ? products.reduce((total, product,) => total + product.qty, 0) : 0;
 
   return (
-    <Container maxWidth="md" sx={{ backgroundColor: '#ccc', padding: 1, minHeight: '100vh' }}>
+    <Container maxWidth="sm" sx={{ backgroundColor: '#ccc', padding: 1 }}>
       <Grid container rowSpacing={1}>
         <Grid item xs={12}>
           <Paper sx={{ padding: 1 }}>
-            <Stack direction={'row'} spacing={1}>
+            <Stack direction={'row-reverse'} spacing={1}>
               <Button variant='contained' onClick={() => setProducts([])}>
                 Novo
               </Button>
@@ -95,61 +98,66 @@ function ContaEstoque() {
         </Grid>
         <Grid item xs={12}>
           <Paper sx={{ padding: 1 }}>
-            <Stack direction={"column"} spacing={1}>
-              <form onSubmit={handleProductSubmit}>
-                <TextField
-                  type='barcode'
-                  onChange={e => setBarcodeInput(e.target.value)}
-                  value={barcodeInput}
-                  invalid={barcodeInputError}
-                  label="Código de Barras"
-                />
-              </form>
-              <Typography>
-                Total de Produtos: {productsCount}
-              </Typography>
-            </Stack>
+            <Grid container alignItems={"center"} spacing={1}>
+              <Grid item xs={12}>
+                <form onSubmit={handleProductSubmit}>
+                  <TextField
+                    type='barcode'
+                    onChange={e => setBarcodeInput(e.target.value)}
+                    value={barcodeInput}
+                    invalid={barcodeInputError}
+                    label="Código de Barras"
+                    fullWidth
+                  />
+                </form>
+              </Grid>
+            </Grid>
           </Paper>
         </Grid>
         <Grid item xs={12}>
           <Paper sx={{ padding: 1 }}>
-            <TableContainer>
-              <Table>
-                <TableHead>
+            <TableContainer sx={{ borderRadius: 1, backgroundColor: '#eee',minHeight: 350, maxHeight: 250 }}>
+              <Table size='small' >
+                <TableHead sx={{ backgroundColor: '#ddd', borderRadius: '50px' }}>
                   <TableRow>
                     <TableCell>
-                      Cód. de Barras
+                      Cód.
                     </TableCell>
                     <TableCell>
-                     Quantidade
+                      Quantidade
                     </TableCell>
-                    <TableCell>
+                    <TableCell align='right'>
                       Ações
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                {products.sort((a, b) => b.date - a.date).map((product, index) => (
-                  <TableRow key={product.barcode}>
-                    <TableCell>
-                      {product.barcode}
-                    </TableCell>
-                    <TableCell>
-                      {product.qty}
-                    </TableCell>
-                    <TableCell>
-                      <Button variant='contained' size='small' onClick={() => handleSubtractItem(index)}>
-                        -
-                      </Button>
-                      <Button variant='contained' className={'ml-2'} onClick={() => handleDeleteItem(index)}>
-                        x
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                  {products.sort((a, b) => b.date - a.date).map((product, index) => (
+                    <TableRow key={product.barcode}>
+                      <TableCell>
+                        {product.barcode}
+                      </TableCell>
+                      <TableCell>
+                        {product.qty}
+                      </TableCell>
+                      <TableCell align='right'>
+                        <IconButton size='small' onClick={() => handleSubtractItem(index)}>
+                          <RemoveIcon />
+                        </IconButton>
+                        <IconButton onClick={() => handleDeleteItem(index)}>
+                          <DeleteForeverIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>
+            <Box margin={1}  textAlign={"end"}>
+              <Typography>
+                Total de Produtos: {productsCount}
+              </Typography>
+            </Box>
           </Paper>
         </Grid>
       </Grid>
