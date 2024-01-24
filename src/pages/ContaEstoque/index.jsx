@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { validate as barcodeValidate } from '../../helper/validators/barcode';
-import ExportCsv from './export-csv';
 import beep from '../../resources/sounds/beep.mp3'
 import { saveProducts, loadProducts } from '../../helper/storage/estoque-storage/index'
-import { Box, Button, Container, Grid, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
+import { Box, Button, ButtonGroup, Container, Grid, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
 
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import RemoveIcon from '@mui/icons-material/Remove';
+import ExportTxt from './export-txt';
+import ConfigMenu from './config-menu';
 
 function ContaEstoque() {
 
@@ -79,20 +80,30 @@ function ContaEstoque() {
     setProducts(productsAfter);
   }
 
+  const handleClearButton = () => {
+    if(window.confirm("Deseja iniciar uma nova contagem?")) {
+      setProducts([]);
+    };
+  }
+
   const productsCount = products?.length > 0 ? products.reduce((total, product,) => total + product.qty, 0) : 0;
 
   return (
-    <Container maxWidth="sm" sx={{ backgroundColor: '#ccc', padding: 1 }}>
+    <Container maxWidth="sm" sx={{ padding: 1 }}>
       <Grid container rowSpacing={1}>
         <Grid item xs={12}>
           <Paper sx={{ padding: 1 }}>
             <Stack direction={'row-reverse'} spacing={1}>
-              <Button variant='contained' onClick={() => setProducts([])}>
+              <ButtonGroup>
+
+              <Button variant='outlined' onClick={handleClearButton}>
                 Novo
               </Button>
-              <ExportCsv
+              <ExportTxt
                 products={products}
-              />
+                />
+                <ConfigMenu/>
+                </ButtonGroup>
             </Stack>
           </Paper>
         </Grid>
