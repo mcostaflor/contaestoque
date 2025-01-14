@@ -12,7 +12,7 @@ const createFile = (data) => {
     }
 
     data.forEach(item => {
-        dataString += `${item.barcode} ${item.qty}\r\n`;
+        dataString += `${item.barcode},${item.qty}\r\n`;
     });
 
     return new Blob([dataString], { type: 'text/plain;charset=utf-8;' });
